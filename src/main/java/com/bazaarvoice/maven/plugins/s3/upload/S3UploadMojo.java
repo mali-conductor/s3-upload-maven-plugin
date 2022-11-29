@@ -14,6 +14,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.transfer.ObjectMetadataProvider;
 import com.amazonaws.services.s3.transfer.Transfer;
 import com.amazonaws.services.s3.transfer.TransferManager;
+import com.bazaarvoice.maven.plugins.s3.wrapper.SSOCompatibleCredentialsProvider;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -24,6 +25,10 @@ import java.io.File;
 @Mojo(name = "s3-upload")
 public class S3UploadMojo extends AbstractMojo
 {
+  /** AWS profile. */
+  @Parameter(property = "s3-upload.profileName")
+  private String profileName;
+
   /** Access key for S3. */
   @Parameter(property = "s3-upload.accessKey")
   private String accessKey;
@@ -66,7 +71,13 @@ public class S3UploadMojo extends AbstractMojo
       throw new MojoExecutionException("File/folder doesn't exist: " + source);
     }
 
-    AmazonS3 s3 = getS3Client(accessKey, secretKey);
+    AmazonS3 s3;
+    if (profileName != null) {
+      s3 = getS3Client(profileName);
+    } else {
+      s3 = getS3Client(accessKey, secretKey);
+    }
+
     if (endpoint != null) {
       s3.setEndpoint(endpoint);
     }
@@ -98,10 +109,14 @@ public class S3UploadMojo extends AbstractMojo
       AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
       provider = new StaticCredentialsProvider(credentials);
     } else {
-      provider = new DefaultAWSCredentialsProviderChain();
+      provider = new SSOCompatibleCredentialsProvider();
     }
 
     return new AmazonS3Client(provider);
+  }
+
+  private static  AmazonS3 getS3Client(String profileName) {
+    return new AmazonS3Client(new SSOCompatibleCredentialsProvider(profileName));
   }
 
   private boolean upload(AmazonS3 s3, File sourceFile) throws MojoExecutionException

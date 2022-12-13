@@ -1,0 +1,25 @@
+####################################################################
+#   Component
+####################################################################
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: s3-upload-maven-plugin
+  github.com/project-slug: bazaarvoice/s3-upload-maven-plugin
+  description: Maven plugin that uploads a file or (recursively) the contents of a directory to S3."
+  annotations:
+    github.com/project-slug: bazaarvoice/s3-upload-maven-plugin
+  links:
+    - url: https://bazaarvoice.slack.com/app_redirect?channel=dev-ex
+      title: Slack channel
+      icon: send
+  tags:
+    - maven
+    - java
+    - plugin
+    - s3
+spec:
+  type: library
+  system: devex-tools
+  lifecycle: production
+  owner: developer-experience

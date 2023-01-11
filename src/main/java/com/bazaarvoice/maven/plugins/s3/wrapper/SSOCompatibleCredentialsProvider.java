@@ -5,14 +5,16 @@ import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.auth.BasicSessionCredentials;
 import software.amazon.awssdk.auth.credentials.AwsCredentials;
+import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.AwsSessionCredentials;
+import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
 
 public class SSOCompatibleCredentialsProvider implements AWSCredentialsProvider {
-    private final ProfileCredentialsProvider delegate;
+    private final AwsCredentialsProvider delegate;
 
     public SSOCompatibleCredentialsProvider() {
-        this.delegate = ProfileCredentialsProvider.create();
+        this.delegate = DefaultCredentialsProvider.create();
     }
 
     public SSOCompatibleCredentialsProvider(String profileName) {

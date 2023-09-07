@@ -3,7 +3,7 @@ name: Build and Package
 on:
   push:
     branches:
-      - master  # Adjust the branch name as needed
+      - main  # Adjust the branch name as needed
 
 jobs:
   build:
@@ -17,6 +17,7 @@ jobs:
       uses: actions/setup-java@v2
       with:
         java-version: '11'  # Specify the desired Java version
+        distribution: 'openjdk'  # Specify the distribution (e.g., 'adopt', 'openjdk')
 
     - name: Build and Package
       run: mvn clean package  # Replace with your Maven goals as needed

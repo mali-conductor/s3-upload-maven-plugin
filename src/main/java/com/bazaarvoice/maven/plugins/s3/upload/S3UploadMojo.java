@@ -53,7 +53,7 @@ public class S3UploadMojo extends AbstractMojo
   private String bucketName;
 
   /** The file/folder (in the bucket) to create. */
-  @Parameter(property = "s3-upload.destination", required = false)
+  @Parameter(property = "s3-upload.destination", required = true)
   private String destination;
 
   /** Force override of endpoint for S3 regions such as EU. */
